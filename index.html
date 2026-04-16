@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoPickup | Transform Waste into Opportunity</title>
+    <meta name="description" content="EcoPickup connects households with nearby waste collectors for on-demand waste pickup, recycling, and sustainable waste management.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        accent: {
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 top-0 left-0">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tight flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white shadow-lg group-hover:shadow-brand-500/50 transition-shadow">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <span class="text-gray-900 font-extrabold group-hover:text-brand-600 transition-colors">Eco<span class="text-brand-600">Pickup</span></span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8 items-center bg-white/80 backdrop-blur-md px-8 py-3 rounded-full shadow-sm border border-gray-100">
+                <a href="#how-it-works" class="text-sm font-medium hover:text-brand-600 transition-colors">How it Works</a>
+                <a href="#features" class="text-sm font-medium hover:text-brand-600 transition-colors">Features</a>
+                <a href="#impact" class="text-sm font-medium hover:text-brand-600 transition-colors">Impact</a>
+                <a href="#captains" class="text-sm font-medium hover:text-brand-600 transition-colors">For Captains</a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-4">
+                <a href="login.html" class="text-gray-900 font-medium text-sm hover:text-brand-600 transition-colors">Login</a>
+                <a href="#app" class="bg-gray-900 hover:bg-brand-600 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-brand-500/30 transform hover:-translate-y-0.5">
+                    Download App
+                </a>
+            </div>
+
+            <button class="md:hidden text-gray-900 text-2xl focus:outline-none" id="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-40 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center space-y-6 pt-20">
+        <a href="#how-it-works" class="mobile-link text-2xl font-bold text-gray-800 hover:text-brand-600">How it Works</a>
+        <a href="#features" class="mobile-link text-2xl font-bold text-gray-800 hover:text-brand-600">Features</a>
+        <a href="#impact" class="mobile-link text-2xl font-bold text-gray-800 hover:text-brand-600">Impact</a>
+        <a href="#captains" class="mobile-link text-2xl font-bold text-gray-800 hover:text-brand-600">For Captains</a>
+        <button id="close-menu" class="absolute top-6 right-6 text-3xl text-gray-800">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
+        <!-- Background Blobs -->
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-brand-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-accent-300 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-blob animation-delay-4000"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10 flex flex-col lg:flex-row items-center gap-12">
+            
+            <div class="lg:w-1/2 mt-10 lg:mt-0 reveal-left">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-sm font-semibold mb-6 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                    Smart Waste Collection
+                </div>
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 leading-[1.1] tracking-tight mb-6">
+                    Transform <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-emerald-700">Waste into <br>Opportunity</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-8 font-inter max-w-lg leading-relaxed">
+                    EcoPickup connects households with smart waste collectors for on-demand pickup, recycling, and a cleaner, sustainable future.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="dashboard.html" class="text-center bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all shadow-xl shadow-brand-500/30 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        Request Pickup <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#captains" class="text-center bg-white border-2 border-gray-200 hover:border-brand-600 hover:text-brand-600 px-8 py-4 rounded-full text-lg font-semibold text-gray-800 transition-all flex items-center justify-center gap-2">
+                        Become a Captain <i class="fa-solid fa-truck-fast"></i>
+                    </a>
+                </div>
+                
+                <div class="mt-10 flex items-center gap-4 text-sm text-gray-500 font-medium">
+                    <div class="flex -space-x-3">
+                        <img class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="User">
+                        <img class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="User">
+                        <img class="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="User">
+                        <div class="w-10 h-10 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600">+2k</div>
+                    </div>
+                    <p>Users already joined our mission.</p>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 relative reveal-right">
+                <!-- Decorative Elements -->
+                <div class="absolute -inset-4 bg-gradient-to-r from-brand-400 to-emerald-300 rounded-[2rem] transform rotate-3 opacity-20 blur-lg"></div>
+                <div class="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white transform hover:scale-[1.02] transition-transform duration-500 z-10">
+                    <img src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=800&q=80" alt="Clean City Concept" class="w-full h-auto object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-white">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-sm"><i class="fa-solid fa-location-dot text-brand-400 mr-2"></i> Live Tracking</span>
+                                <span class="bg-brand-500 text-white text-xs px-2 py-1 rounded-full animate-pulse">Captain Nearby</span>
+                            </div>
+                            <div class="w-full bg-gray-200/30 rounded-full h-1.5 mt-2">
+                                <div class="bg-brand-400 h-1.5 rounded-full w-2/3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Floating Card -->
+                <div class="absolute -right-8 top-12 bg-white p-4 rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 animate-float z-20 hidden md:block">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-semibold uppercase">Impact</p>
+                            <p class="text-lg font-bold text-gray-900">5.2k kg Recyled</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Scroll indicator -->
+        <a href="#how-it-works" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-gray-400 hover:text-brand-500 transition-colors animate-bounce">
+            <span class="text-xs font-semibold tracking-widest uppercase mb-2">Scroll</span>
+            <i class="fa-solid fa-arrow-down"></i>
+        </a>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal-up">
+                <h2 class="text-brand-600 font-bold tracking-wider uppercase text-sm mb-2">Process</h2>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">How EcoPickup Works</h3>
+                <p class="text-gray-600">A seamless, 3-step process connecting you to a cleaner future.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                <!-- Connecting Line for Desktop -->
+                <div class="hidden md:block absolute top-1/2 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-brand-100 via-brand-500 to-brand-100 -translate-y-1/2 z-0 opacity-30"></div>
+
+                <!-- Step 1 -->
+                <div class="reveal-up delay-100 text-center relative z-10 group">
+                    <div class="w-24 h-24 mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 flex items-center justify-center mb-6 transform group-hover:-translate-y-2 transition-transform duration-300 relative">
+                        <div class="absolute -inset-2 bg-brand-100 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-800 relative z-10 group-hover:text-brand-600 transition-colors"></i>
+                        <div class="absolute -top-3 -right-3 w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold border-4 border-white">1</div>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Request Pickup</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed px-4">Use our app to schedule a pickup. Sort your waste, snap a photo, and hit request.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="reveal-up delay-200 text-center relative z-10 group">
+                    <div class="w-24 h-24 mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 flex items-center justify-center mb-6 transform group-hover:-translate-y-2 transition-transform duration-300 relative">
+                        <div class="absolute -inset-2 bg-brand-100 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <i class="fa-solid fa-truck-fast text-4xl text-gray-800 relative z-10 group-hover:text-brand-600 transition-colors"></i>
+                        <div class="absolute -top-3 -right-3 w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold border-4 border-white">2</div>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Captain Accepts</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed px-4">A nearby verified captain accepts the job and arrives quickly with smart routing.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="reveal-up delay-300 text-center relative z-10 group">
+                    <div class="w-24 h-24 mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 flex items-center justify-center mb-6 transform group-hover:-translate-y-2 transition-transform duration-300 relative">
+                        <div class="absolute -inset-2 bg-brand-100 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <i class="fa-solid fa-recycle text-4xl text-gray-800 relative z-10 group-hover:text-brand-600 transition-colors"></i>
+                        <div class="absolute -top-3 -right-3 w-8 h-8 bg-brand-600 text-white rounded-full flex items-center justify-center font-bold border-4 border-white">3</div>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Collect & Recycle</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed px-4">Waste is responsibly collected, processed, and reintroduced into the circular economy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-gray-50">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal-up">
+                <div class="max-w-2xl">
+                    <h2 class="text-brand-600 font-bold tracking-wider uppercase text-sm mb-2">Why EcoPickup?</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-gray-900">Next-Gen Waste Management</h3>
+                </div>
+                <p class="text-gray-600 mt-4 md:mt-0 max-w-md">Packed with features to make sustainable living effortless for households and profitable for collectors.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <a href="dashboard.html?tab=schedule" class="block bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-brand-100/50 transition-all duration-300 group reveal-up">
+                    <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">On-Demand Pickup</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Like ordering an Uber, schedule a pickup whenever you need it. No more waiting for fixed collection days.</p>
+                </a>
+                <!-- Feature 2 -->
+                <a href="https://maps.google.com" target="_blank" class="block bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-brand-100/50 transition-all duration-300 group reveal-up delay-100">
+                    <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Live Tracking</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Track your assigned captain in real-time on a map, so you know exactly when they will arrive at your location.</p>
+                </a>
+                <!-- Feature 3 -->
+                <a href="dashboard.html?tab=gamification" class="block bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-brand-100/50 transition-all duration-300 group reveal-up delay-200">
+                    <div class="w-14 h-14 bg-yellow-50 text-yellow-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-yellow-500 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Earn from Waste</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Get paid or earn points for valuable recyclables. Turn your everyday trash into literal treasure.</p>
+                </a>
+                <!-- Feature 4 -->
+                <a href="dashboard.html?tab=gamification" class="block bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-brand-100/50 transition-all duration-300 group reveal-up">
+                    <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-boxes-stacked"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Smart Segregation</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Built-in AI guides to help you sort waste accurately into wet, dry, and e-waste for zero-hassle pickups.</p>
+                </a>
+                <!-- Feature 5 -->
+                <a href="dashboard.html?tab=tracking" class="block bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-brand-100/50 transition-all duration-300 group reveal-up delay-100">
+                    <div class="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Route Optimization</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Our backend algorithm ensures captains take the shortest paths, saving fuel and time.</p>
+                </a>
+                <!-- Feature 6 -->
+                <div class="bg-gradient-to-br from-brand-500 to-brand-700 p-8 rounded-3xl shadow-lg hover:shadow-xl hover:shadow-brand-500/30 transition-all duration-300 text-white flex flex-col justify-center reveal-up delay-200">
+                    <h4 class="text-2xl font-bold mb-4">Ready to make an impact?</h4>
+                    <p class="text-brand-100 text-sm mb-6">Join thousands already using EcoPickup to manage their waste responsibly.</p>
+                    <a href="dashboard.html" class="inline-flex items-center gap-2 bg-white text-brand-700 hover:bg-gray-50 px-6 py-3 rounded-full text-sm font-bold transition-colors w-max">
+                        Get Started <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats Section -->
+    <section id="impact" class="py-20 bg-gray-900 relative overflow-hidden">
+        <!-- Abstract wave -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full text-white fill-current">
+                <path d="M0 100 C 20 0 50 0 100 100 Z"></path>
+            </svg>
+        </div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-gray-800">
+                <div class="reveal-up">
+                    <div class="text-4xl md:text-5xl font-extrabold text-white mb-2 counter" data-target="1500">0</div>
+                    <div class="text-brand-400 font-medium">Tons Collected</div>
+                </div>
+                <div class="reveal-up delay-100">
+                    <div class="text-4xl md:text-5xl font-extrabold text-white mb-2 counter" data-target="85">0</div>
+                    <div class="text-brand-400 font-medium">% Recycled</div>
+                </div>
+                <div class="reveal-up delay-200">
+                    <div class="text-4xl md:text-5xl font-extrabold text-white mb-2 counter" data-target="12000">0</div>
+                    <div class="text-brand-400 font-medium">Active Users</div>
+                </div>
+                <div class="reveal-up delay-300">
+                    <div class="text-4xl md:text-5xl font-extrabold text-white mb-2 counter" data-target="450">0</div>
+                    <div class="text-brand-400 font-medium">Captains</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Captains Section -->
+    <section id="captains" class="py-24 bg-white">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Image side -->
+                <div class="lg:w-1/2 relative reveal-left">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-brand-100 to-brand-50 border border-brand-100">
+                        <div class="w-full h-[350px] flex flex-col items-center justify-center relative">
+                            <div class="w-32 h-32 rounded-full border-8 border-white bg-brand-500 shadow-xl flex items-center justify-center mb-6 z-10 relative">
+                                <i class="fa-solid fa-truck-fast text-[4rem] text-white"></i>
+                                <div class="absolute -bottom-2 -right-2 w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white text-yellow-900 shadow-sm"><i class="fa-solid fa-star text-sm"></i></div>
+                            </div>
+                            <h4 class="text-3xl font-extrabold text-brand-800 tracking-tight z-10 drop-shadow-sm">EcoCaptain</h4>
+                            <p class="text-brand-600 font-medium tracking-widest uppercase text-sm mt-1 z-10">Hero of the streets</p>
+                        </div>
+                    </div>
+                    <!-- Badge -->
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-xl flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 text-xl">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 font-medium text-xs">Average Earnings</p>
+                            <p class="font-bold text-gray-900 text-lg">$800/week</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text side -->
+                <div class="lg:w-1/2 reveal-right">
+                    <h2 class="text-brand-600 font-bold tracking-wider uppercase text-sm mb-2">For Collectors</h2>
+                    <h3 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">Become an EcoPickup Captain</h3>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Join our fleet of dedicated waste collectors. Enjoy flexible hours, daily payouts, and make a real difference in your community while earning a sustainable living.
+                    </p>
+
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-check text-xs"></i></div>
+                            <div>
+                                <h5 class="font-bold text-gray-900">Flexible Working</h5>
+                                <p class="text-sm text-gray-600">Work when you want, where you want. You are the boss.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-check text-xs"></i></div>
+                            <div>
+                                <h5 class="font-bold text-gray-900">Easy Onboarding</h5>
+                                <p class="text-sm text-gray-600">Sign up, pass a background check, and start collecting within 48 hours.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa-solid fa-check text-xs"></i></div>
+                            <div>
+                                <h5 class="font-bold text-gray-900">Smart App Guidance</h5>
+                                <p class="text-sm text-gray-600">Our app provides route optimization so you spend less time driving and more time earning.</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <a href="apply.html" class="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-full font-semibold transition-all shadow-lg transform hover:-translate-y-1">
+                        Apply Now <i class="fa-solid fa-file-signature"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Circular Economy Section -->
+    <section class="py-24 bg-brand-50 relative overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 text-center relative z-10">
+            <h2 class="text-brand-600 font-bold tracking-wider uppercase text-sm mb-2 reveal-up">Vision</h2>
+            <h3 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 reveal-up">Driving the Circular Economy</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-16 reveal-up">We don't just dump waste; we process it. By reintroducing materials back into the production cycle, we minimize environmental footprint.</p>
+
+            <div class="relative max-w-3xl mx-auto h-[400px] sm:h-[500px] reveal-up">
+                <!-- Center Icon -->
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white rounded-full shadow-2xl flex items-center justify-center z-20">
+                    <i class="fa-solid fa-recycle text-[5rem] text-brand-600 opacity-90 animate-[spin_10s_linear_infinite]"></i>
+                </div>
+                
+                <!-- Orbit Items using absolute positioning -->
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 text-center w-32">
+                    <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-lg flex items-center justify-center text-blue-500 text-2xl mb-2">
+                        <i class="fa-solid fa-house"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800">Generation</span>
+                </div>
+
+                <div class="absolute top-1/4 right-0 text-center w-32">
+                    <div class="w-16 h-16 mx-auto bg-brand-500 rounded-full shadow-lg flex items-center justify-center text-white text-2xl mb-2">
+                        <i class="fa-solid fa-truck"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800">Collection</span>
+                </div>
+
+                <div class="absolute bottom-1/4 right-0 text-center w-32">
+                    <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-lg flex items-center justify-center text-purple-500 text-2xl mb-2">
+                        <i class="fa-solid fa-industry"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800">Processing</span>
+                </div>
+
+                <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center w-32">
+                    <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-lg flex items-center justify-center text-yellow-500 text-2xl mb-2">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800">Manufacturing</span>
+                </div>
+
+                <div class="absolute bottom-1/4 left-0 text-center w-32">
+                    <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-lg flex items-center justify-center text-red-500 text-2xl mb-2">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800">Retail</span>
+                </div>
+
+                <div class="absolute top-1/4 left-0 text-center w-32">
+                    <div class="w-16 h-16 mx-auto bg-white rounded-full shadow-lg flex items-center justify-center text-green-500 text-2xl mb-2">
+                        <i class="fa-solid fa-hands-holding-circle"></i>
+                    </div>
+                    <span class="text-sm font-bold text-gray-800">Consumption</span>
+                </div>
+                
+                <!-- Connecting dotted circle (CSS drawn) -->
+                <div class="absolute top-10 bottom-10 left-12 right-12 border-2 border-dashed border-gray-300 rounded-full z-0 opacity-50"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Section -->
+    <section id="app" class="py-24 bg-gray-900 text-white relative overflow-hidden">
+        <div class="absolute -right-32 -top-32 w-96 h-96 bg-brand-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute -left-32 -bottom-32 w-96 h-96 bg-accent-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+
+        <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-12 relative z-10">
+            <div class="md:w-1/2 reveal-left text-center md:text-left">
+                <span class="bg-gray-800 text-brand-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Coming Soon</span>
+                <h3 class="text-4xl md:text-5xl font-extrabold mt-6 mb-6">Manage Pickups From Your Pocket</h3>
+                <p class="text-gray-400 text-lg mb-8">Our upcoming mobile app will put the power of sustainable waste management right in your hands. Track caps, earn rewards, and schedule seamlessly.</p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
+                    <button class="bg-black border border-gray-700 hover:border-gray-500 rounded-xl px-6 py-3 flex items-center gap-3 transition-colors w-full sm:w-auto">
+                        <i class="fa-brands fa-apple text-3xl"></i>
+                        <div class="text-left">
+                            <div class="text-[10px] uppercase tracking-wider text-gray-400">Download on the</div>
+                            <div class="text-sm font-bold">App Store</div>
+                        </div>
+                    </button>
+                    <button class="bg-black border border-gray-700 hover:border-gray-500 rounded-xl px-6 py-3 flex items-center gap-3 transition-colors w-full sm:w-auto">
+                        <i class="fa-brands fa-google-play text-2xl text-brand-500"></i>
+                        <div class="text-left">
+                            <div class="text-[10px] uppercase tracking-wider text-gray-400">GET IT ON</div>
+                            <div class="text-sm font-bold">Google Play</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CSS Phone Mockup -->
+            <div class="md:w-1/2 flex justify-center reveal-right">
+                <div class="relative w-[300px] h-[600px] bg-gray-800 rounded-[3rem] border-[8px] border-gray-900 shadow-2xl overflow-hidden flex flex-col shadow-brand-500/20">
+                    <!-- Notch -->
+                    <div class="absolute top-0 inset-x-0 h-6 bg-gray-900 rounded-b-3xl mx-auto w-1/2 z-20"></div>
+                    
+                    <!-- App UI -->
+                    <div class="flex-1 bg-gray-50 overflow-y-auto pb-4 custom-scrollbar">
+                        <div class="bg-brand-600 text-white p-6 pt-10 rounded-b-3xl shadow-sm">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <p class="text-xs text-brand-100">Welcome back,</p>
+                                    <p class="font-bold">Sarah Jenkins</p>
+                                </div>
+                                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-bell"></i></div>
+                            </div>
+                            <div class="bg-white/10 p-4 rounded-2xl flex justify-between items-center backdrop-blur-sm border border-white/20">
+                                <div>
+                                    <p class="text-xs text-brand-100">Eco Points</p>
+                                    <p class="text-2xl font-bold">1,450</p>
+                                </div>
+                                <button class="bg-white text-brand-600 px-4 py-2 rounded-full text-xs font-bold">Redeem</button>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h4 class="font-bold text-gray-800 mb-4">Quick Actions</h4>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center hover:border-brand-500 cursor-pointer">
+                                    <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-full mx-auto flex items-center justify-center mb-2"><i class="fa-solid fa-truck"></i></div>
+                                    <p class="text-xs font-bold text-gray-700">Schedule</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 text-center hover:border-brand-500 cursor-pointer">
+                                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full mx-auto flex items-center justify-center mb-2"><i class="fa-solid fa-camera"></i></div>
+                                    <p class="text-xs font-bold text-gray-700">Scan Waste</p>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-bold text-gray-800 mb-4">Recent Pickups</h4>
+                            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-3 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500"><i class="fa-solid fa-check"></i></div>
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-800">Mixed Recyclables</p>
+                                        <p class="text-xs text-gray-500">Yesterday, 2:30 PM</p>
+                                    </div>
+                                </div>
+                                <span class="text-brand-600 font-bold text-sm">+50 pts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-1">
+                    <a href="#" class="text-2xl font-bold tracking-tight flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-leaf text-sm"></i>
+                        </div>
+                        <span class="text-gray-900">Eco<span class="text-brand-600">Pickup</span></span>
+                    </a>
+                    <p class="text-gray-500 text-sm mb-6">Uber for waste. Making recycling easy, profitable, and accessible for everyone.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h5 class="font-bold text-gray-900 mb-4">Company</h5>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Impact Report</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Press</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="font-bold text-gray-900 mb-4">Resources</h5>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Recycling Guide</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Captain Portal</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-600 text-sm transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="font-bold text-gray-900 mb-4">Newsletter</h5>
+                    <p class="text-gray-500 text-sm mb-4">Stay updated with our latest green initiatives.</p>
+                    <form class="flex" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Email address" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-l-lg p-2.5 outline-none focus:border-brand-500 w-full" required>
+                        <button type="submit" class="bg-brand-600 text-white rounded-r-lg px-4 hover:bg-brand-700 transition-colors"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-400 text-sm">© 2026 EcoPickup Inc. All rights reserved.</p>
+                <div class="flex gap-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-brand-600">Privacy Policy</a>
+                    <a href="#" class="hover:text-brand-600">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

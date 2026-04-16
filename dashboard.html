@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | EcoPickup</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: { 50: '#f0fdf4', 100: '#dcfce7', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 900: '#14532d' },
+                        accent: { 500: '#0ea5e9', 600: '#0284c7' }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-100 flex flex-col justify-between hidden md:flex h-full z-40">
+        <div>
+            <div class="h-20 flex items-center px-8 border-b border-gray-100">
+                <a href="index.html" class="text-xl font-bold tracking-tight flex items-center gap-2 group">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white"><i class="fa-solid fa-leaf text-sm"></i></div>
+                    <span class="text-gray-900">Eco<span class="text-brand-600">Pickup</span></span>
+                </a>
+            </div>
+            <nav class="p-4 space-y-2">
+                <button id="nav-gamification" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-50 text-brand-600 font-semibold transition-all" onclick="showTab('gamification')">
+                    <i class="fa-solid fa-gamepad w-5 text-left"></i> Gamification
+                </button>
+                <button id="nav-schedule" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('schedule')">
+                    <i class="fa-solid fa-box w-5 text-left"></i> Schedule Pickup
+                </button>
+                <button id="nav-tracking" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('tracking')">
+                    <i class="fa-solid fa-truck-fast w-5 text-left"></i> Tracking
+                </button>
+                <button id="nav-profile" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('profile')">
+                    <i class="fa-solid fa-user w-5 text-left"></i> Profile Settings
+                </button>
+                <button id="nav-ai" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('ai')">
+                    <i class="fa-solid fa-robot w-5 text-left"></i> AI Sorting Guide
+                </button>
+            </nav>
+        </div>
+        <div class="p-4">
+            <div class="bg-gray-900 rounded-xl p-4 text-white">
+                <p class="text-xs text-gray-400 mb-1">Current Plan</p>
+                <p class="font-bold flex justify-between items-center text-sm">Pro Sub <span class="bg-brand-500 text-xs px-2 py-0.5 rounded-full">Active</span></p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Menu Button Only (overlay logic omitted for brevity in this single file demo) -->
+    
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-y-auto custom-scrollbar relative">
+        
+        <!-- Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 md:px-10 sticky top-0 z-30">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-gray-500"><i class="fa-solid fa-bars text-xl"></i></button>
+                <h1 id="page-title" class="text-xl font-bold text-gray-900">Your Rewards Dashboard</h1>
+            </div>
+            <div class="flex items-center gap-6 cursor-pointer">
+                <!-- Points Chip -->
+                <div class="hidden sm:flex items-center gap-2 bg-yellow-50 px-3 py-1.5 rounded-full border border-yellow-200 shadow-sm transition-transform hover:scale-105" onclick="showTab('gamification')">
+                    <div class="w-6 h-6 bg-yellow-400 text-yellow-900 rounded-full flex items-center justify-center text-xs shadow-inner animate-[spin_4s_linear_infinite]"><i class="fa-solid fa-bolt"></i></div>
+                    <span class="font-bold text-yellow-700 text-sm">3,450 pts</span>
+                </div>
+                <!-- Profile Area -->
+                <div class="flex items-center gap-3 pl-4 border-l border-gray-200" onclick="showTab('profile')">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover">
+                    <div class="hidden md:block text-sm">
+                        <p class="font-bold text-gray-900">User</p>
+                        <p class="text-xs text-gray-500">Level 4: Earth Saver</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-6 md:p-10 max-w-7xl mx-auto w-full pb-20">
+            
+            <!-- GAMIFICATION TAB -->
+            <div id="tab-gamification" class="tab-content block">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Welcome back, User! 👋</h2>
+                    <p class="text-gray-500">Track your environmental impact and manage your points to earn subscription discounts.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Level Widget -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-brand-50 rounded-full mix-blend-multiply opacity-50"></div>
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-brand-400 to-brand-600 rounded-full flex items-center justify-center text-white shadow-md text-xl"><i class="fa-solid fa-shield-cat"></i></div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500">Current Level</p>
+                                <p class="text-xl font-bold text-gray-900">Earth Saver</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex justify-between text-xs font-semibold text-gray-600 mb-1">
+                                <span>Level 4</span>
+                                <span class="text-brand-600">Level 5 (500 pts left)</span>
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-full h-2">
+                                <div class="bg-brand-500 h-2 rounded-full w-[70%]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Points Widget -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-50 rounded-full mix-blend-multiply opacity-50"></div>
+                        <div class="flex items-center gap-4 mb-2">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white shadow-md text-xl"><i class="fa-solid fa-bolt"></i></div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500">Available Balance</p>
+                                <p class="text-3xl font-extrabold text-gray-900">3,450 <span class="text-lg font-medium text-gray-500">pts</span></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-yellow-600 font-bold mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +450 points this week</p>
+                    </div>
+
+                    <!-- Gamification Rules Mini-card -->
+                    <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700 text-white flex flex-col justify-center">
+                        <h4 class="font-bold mb-3 flex items-center gap-2 text-brand-400"><i class="fa-solid fa-gamepad"></i> Game Rules</h4>
+                        <ul class="text-sm space-y-2">
+                            <li class="flex items-center justify-between"><span><i class="fa-solid fa-microchip text-xs mr-2 text-blue-400"></i>E-Waste Handover</span> <span class="text-green-400 font-bold">+100 pts</span></li>
+                            <li class="flex items-center justify-between"><span><i class="fa-solid fa-boxes-stacked text-xs mr-2 text-purple-400"></i>Perfect Segregation</span> <span class="text-green-400 font-bold">+50 pts</span></li>
+                            <li class="flex items-center justify-between"><span><i class="fa-solid fa-triangle-exclamation text-xs mr-2 text-red-500"></i>Unsegregated Penalty</span> <span class="text-red-400 font-bold">-50 pts</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Subscription Discount Progress -->
+                    <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-900">Subscription Discount</h3>
+                                    <p class="text-sm text-gray-500 mt-1">Unlock a free month of pickups with your points!</p>
+                                </div>
+                                <div class="w-10 h-10 bg-brand-50 rounded-full flex items-center justify-center text-brand-600"><i class="fa-solid fa-receipt text-xl"></i></div>
+                            </div>
+                            <div class="mb-6 relative">
+                                <div class="flex justify-between text-sm font-bold text-gray-700 mb-2">
+                                    <span>Progress to Free Month</span>
+                                    <span>3,450 / 5,000 pts</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-4 overflow-hidden relative shadow-inner">
+                                    <div class="absolute top-0 left-0 h-4 bg-gradient-to-r from-brand-400 to-brand-600 rounded-full transition-all duration-1000 ease-out" style="width: 69%;"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2 text-right">Only 1,550 points left to claim!</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button class="w-full py-4 rounded-xl bg-gray-100 text-gray-400 font-bold cursor-not-allowed transition-all text-sm mb-3">
+                                <i class="fa-solid fa-lock mr-2"></i> Redeem Free Month (requires 5,000 pts)
+                            </button>
+                            <button class="w-full py-4 rounded-xl bg-brand-50 text-brand-600 hover:bg-brand-100 font-bold transition-all text-sm shadow-sm border border-brand-100 transform hover:-translate-y-0.5" onclick="alert('Congratulations! $5 Discount applied to your next bill.')">
+                                <i class="fa-solid fa-tag mr-2"></i> Redeem $5 Discount (requires 1,000 pts)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity/Points Log -->
+                    <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-bold text-gray-900">Recent Gamification Activity</h3>
+                            <a href="#" class="text-xs font-bold text-brand-600 hover:underline">View All</a>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-laptop text-sm"></i></div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Handed over E-Waste</p>
+                                        <p class="text-xs text-gray-500">Today, 2:30 PM • 3 items</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-green-500 bg-green-50 px-2 py-1 rounded-lg text-sm">+100</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-boxes-stacked text-sm"></i></div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Perfect Segregation Bonus</p>
+                                        <p class="text-xs text-gray-500">Yesterday, 9:00 AM • Captain approved</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-green-500 bg-green-50 px-2 py-1 rounded-lg text-sm">+50</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-red-50/50 rounded-xl transition-colors border border-red-100">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-triangle-exclamation text-sm"></i></div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Unsegregated Penalty</p>
+                                        <p class="text-xs text-gray-500">Apr 3, 10:15 AM • Wet mixed with dry</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-red-500 bg-white border border-red-100 px-2 py-1 rounded-lg text-sm">-50</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-calendar-check text-sm"></i></div>
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Weekly Streak</p>
+                                        <p class="text-xs text-gray-500">Apr 1, 12:00 PM • 4 weeks active</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-green-500 bg-green-50 px-2 py-1 rounded-lg text-sm">+200</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCHEDULE PICKUP TAB -->
+            <div id="tab-schedule" class="tab-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Schedule a Pickup 🚚</h2>
+                    <p class="text-gray-500">Book our smartest captains to collect exactly what you don't need.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-4xl">
+                    <form onsubmit="event.preventDefault(); showTab('tracking');" class="space-y-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">1. Select Waste Type</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <label class="border border-brand-200 bg-brand-50 rounded-xl p-4 cursor-pointer flex flex-col items-center text-center gap-2 transition-all hover:shadow-md relative">
+                                    <input type="checkbox" checked class="absolute top-4 right-4 w-4 h-4 text-brand-600 rounded">
+                                    <i class="fa-solid fa-laptop text-2xl text-brand-600"></i>
+                                    <span class="font-bold text-brand-900 text-sm">E-Waste</span>
+                                    <span class="text-xs text-brand-600 font-semibold bg-white px-2 py-1 rounded-full">+100 pts per item!</span>
+                                </label>
+                                <label class="border border-gray-200 rounded-xl p-4 cursor-pointer flex flex-col items-center text-center gap-2 transition-all hover:bg-gray-50 relative">
+                                    <input type="checkbox" checked class="absolute top-4 right-4 w-4 h-4 text-brand-600 rounded">
+                                    <i class="fa-solid fa-bottle-water text-2xl text-blue-500"></i>
+                                    <span class="font-bold text-gray-900 text-sm">Recyclables</span>
+                                    <span class="text-xs text-gray-500 font-semibold">+50 pts (if segregated)</span>
+                                </label>
+                                <label class="border border-gray-200 rounded-xl p-4 cursor-pointer flex flex-col items-center text-center gap-2 transition-all hover:bg-gray-50 relative">
+                                    <input type="checkbox" class="absolute top-4 right-4 w-4 h-4 text-brand-600 rounded">
+                                    <i class="fa-solid fa-trash text-2xl text-gray-500"></i>
+                                    <span class="font-bold text-gray-900 text-sm">General Waste</span>
+                                    <span class="text-xs text-gray-500 font-semibold">Standard collection</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">2. Pick a Date & Time</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
+                                    <input type="date" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3 outline-none focus:border-brand-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Time Slot</label>
+                                    <select class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3 outline-none focus:border-brand-500" required>
+                                        <option>09:00 AM - 11:00 AM</option>
+                                        <option>12:00 PM - 03:00 PM</option>
+                                        <option>04:00 PM - 06:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">3. Pickup Address</h3>
+                            <textarea class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-4 outline-none focus:border-brand-500 min-h-[100px]" placeholder="Enter full address or building details..." required>123 Greenway Blvd, Apt 4B, Eco City</textarea>
+                            <div class="mt-4 flex items-center justify-between border border-dashed border-gray-300 rounded-xl p-6 bg-gray-50 text-center cursor-pointer hover:bg-gray-100 transition-colors">
+                                <div class="flex flex-col items-center w-full text-gray-500">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl mb-2 text-brand-500"></i>
+                                    <p class="font-bold text-sm">Upload Photo of Waste (Optional)</p>
+                                    <p class="text-xs mt-1">Helps captains bring the right vehicle size</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex justify-end">
+                            <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg shadow-brand-500/30 transform hover:-translate-y-1 transition-all flex items-center gap-2">
+                                Confirm Pickup <i class="fa-solid fa-check"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TRACKING TAB -->
+            <div id="tab-tracking" class="tab-content hidden">
+                <div class="mb-8 flex justify-between items-end">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Live Tracking 📍</h2>
+                        <p class="text-gray-500">Your scheduled pickup: <span class="font-bold text-gray-900">Reference #ECO-9923K</span></p>
+                    </div>
+                    <span class="bg-brand-100 text-brand-700 font-bold px-4 py-2 rounded-full text-sm animate-pulse flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-500"></span> Captain En Route
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Tracker Steps -->
+                    <div class="lg:col-span-1 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-max">
+                        <h3 class="text-lg font-bold text-gray-900 mb-6">Pickup Status</h3>
+                        
+                        <div class="relative pl-8 space-y-8">
+                            <!-- Line connecting steps -->
+                            <div class="absolute top-2 bottom-6 left-3 w-0.5 bg-gray-200"></div>
+                            <div class="absolute top-2 h-1/2 left-3 w-0.5 bg-brand-500 z-0"></div> <!-- Progress line -->
+
+                            <!-- Step 1 -->
+                            <div class="relative z-10">
+                                <div class="absolute -left-[39px] w-6 h-6 rounded-full bg-brand-500 border-4 border-white flex items-center justify-center text-white"><i class="fa-solid fa-check text-[10px]"></i></div>
+                                <p class="font-bold text-gray-900 text-sm">Pickup Requested</p>
+                                <p class="text-xs text-gray-500 mt-1">9:15 AM</p>
+                            </div>
+                            
+                            <!-- Step 2 -->
+                            <div class="relative z-10">
+                                <div class="absolute -left-[39px] w-6 h-6 rounded-full bg-brand-500 border-4 border-white flex items-center justify-center text-white"><i class="fa-solid fa-check text-[10px]"></i></div>
+                                <p class="font-bold text-gray-900 text-sm">Captain Assigned</p>
+                                <p class="text-xs text-gray-500 mt-1">Michael T. assigned at 9:30 AM</p>
+                                
+                                <div class="bg-gray-50 rounded-xl p-3 border border-gray-100 mt-3 flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-brand-100 border border-brand-200 shadow-sm flex items-center justify-center text-brand-600"><i class="fa-solid fa-user-astronaut"></i></div>
+                                    <div class="flex-1">
+                                        <p class="font-bold text-sm text-gray-900">Michael T.</p>
+                                        <div class="flex text-yellow-400 text-xs gap-0.5"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
+                                    </div>
+                                    <button class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center hover:bg-brand-200 transition-colors"><i class="fa-solid fa-phone text-xs"></i></button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3 (Current) -->
+                            <div class="relative z-10">
+                                <div class="absolute -left-[41px] w-7 h-7 rounded-full bg-white border-4 border-brand-500 flex items-center justify-center animate-bounce z-20">
+                                    <div class="w-2 h-2 rounded-full bg-brand-500"></div>
+                                </div>
+                                <p class="font-bold text-brand-600 text-sm">In Transit</p>
+                                <p class="text-xs text-gray-500 mt-1">Estimated Arrival: 15 mins</p>
+                            </div>
+
+                            <!-- Step 4 -->
+                            <div class="relative z-10 opacity-50">
+                                <div class="absolute -left-[39px] w-6 h-6 rounded-full bg-gray-200 border-4 border-white flex items-center justify-center"></div>
+                                <p class="font-bold text-gray-900 text-sm">Arrived & Collected</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map Mockup -->
+                    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-2 overflow-hidden h-max relative">
+                        <!-- Decorative CSS Map Mock -->
+                        <div class="w-full h-[450px] bg-gray-200 rounded-xl relative overflow-hidden flex items-center justify-center object-cover" style="background-image: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80');">
+                            <div class="absolute inset-0 bg-brand-900/10 mix-blend-multiply"></div>
+                            
+                            <!-- Tracking Route Line -->
+                            <svg class="absolute top-0 left-0 w-full h-full pointer-events-none drop-shadow-xl" preserveAspectRatio="none">
+                                <path d="M 300,100 C 400,150 500,100 600,250 S 400,300 450,400" stroke="#16a34a" stroke-width="6" stroke-dasharray="10" fill="none" class="animate-[dash_20s_linear_infinite]"/>
+                            </svg>
+
+                            <!-- Home Pin -->
+                            <div class="absolute left-[450px] top-[400px] flex flex-col items-center">
+                                <div class="bg-gray-900 font-bold text-white text-xs px-3 py-1 rounded-full mb-1 shadow-lg">Home</div>
+                                <div class="w-8 h-8 bg-black rounded-full border-4 border-white shadow-xl flex items-center justify-center text-white"><i class="fa-solid fa-house text-[10px]"></i></div>
+                            </div>
+                            
+                            <!-- Truck Pin -->
+                            <div class="absolute left-[300px] top-[100px] flex flex-col items-center transition-all duration-1000 transform translate-x-[50px] translate-y-[20px]">
+                                <div class="bg-brand-500 font-bold text-white text-xs px-3 py-1 rounded-full mb-1 shadow-lg whitespace-nowrap">Michael • 15 mins</div>
+                                <div class="w-10 h-10 bg-white rounded-full border-4 border-brand-500 shadow-xl flex items-center justify-center text-brand-600"><i class="fa-solid fa-truck-fast text-sm"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE SETTINGS TAB -->
+            <div id="tab-profile" class="tab-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Profile & Settings ⚙️</h2>
+                    <p class="text-gray-500">Manage your account details and gamification payout methods.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Col -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <!-- User Card -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                            <div class="relative w-24 h-24 mx-auto mb-4">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Profile" class="w-full h-full rounded-full border-4 border-white shadow-md object-cover">
+                                <button class="absolute bottom-0 right-0 w-8 h-8 bg-brand-500 text-white rounded-full border-2 border-white flex items-center justify-center hover:bg-brand-600 transition-colors"><i class="fa-solid fa-camera text-xs"></i></button>
+                            </div>
+                            <h3 class="font-bold text-lg text-gray-900 mb-1">User</h3>
+                            <p class="text-gray-500 text-sm mb-4">user@ecopickup.com</p>
+                            <div class="bg-brand-50 text-brand-700 py-2 rounded-lg font-bold text-sm">Level 4: Earth Saver</div>
+                        </div>
+
+                        <!-- Bank Linking -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2"><i class="fa-solid fa-building-columns text-gray-400"></i> Payout Method</h4>
+                            <p class="text-xs text-gray-500 mb-4">You can convert Eco Points directly to cash payouts once connected.</p>
+                            
+                            <div class="border border-gray-200 rounded-xl p-4 flex items-center justify-between mb-4 mt-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600"><i class="fa-solid fa-building-columns"></i></div>
+                                    <div>
+                                        <p class="font-bold text-sm text-gray-900">Chase Bank</p>
+                                        <p class="text-xs text-gray-500">**** 4592</p>
+                                    </div>
+                                </div>
+                                <span class="text-green-500 text-xs font-bold bg-green-50 px-2 py-1 rounded-md">Connected</span>
+                            </div>
+                            
+                            <button class="w-full py-2.5 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-colors text-sm">Change Account</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Col -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Details Form -->
+                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-gray-900 mb-6 text-lg border-b border-gray-100 pb-2">Personal Information</h4>
+                            <form>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                                        <input type="text" value="User" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3 outline-none focus:border-brand-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                                        <input type="email" value="user@ecopickup.com" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3 outline-none focus:border-brand-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+                                        <input type="tel" value="+1 (555) 123-4567" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3 outline-none focus:border-brand-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Default Address</label>
+                                        <input type="text" value="123 Greenway Blvd, Eco City" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl p-3 outline-none focus:border-brand-500">
+                                    </div>
+                                </div>
+                                <button type="button" class="bg-gray-900 hover:bg-black text-white font-bold py-3 px-6 rounded-xl transition-all shadow-sm">Save Changes</button>
+                            </form>
+                        </div>
+
+                        <!-- Notification Settings -->
+                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                            <h4 class="font-bold text-gray-900 mb-6 text-lg border-b border-gray-100 pb-2">Notifications</h4>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Gamification Alerts</p>
+                                        <p class="text-xs text-gray-500">Get notified when you earn/lose points.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between pt-2 border-t border-gray-50">
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Captain Tracking SMS</p>
+                                        <p class="text-xs text-gray-500">Receive SMS ETA updates.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between pt-2 border-t border-gray-50">
+                                    <div>
+                                        <p class="font-bold text-gray-900 text-sm">Promotional Offers</p>
+                                        <p class="text-xs text-gray-500">Emails about new point multiplier days.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-500"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI SORTING TAB -->
+            <div id="tab-ai" class="tab-content hidden">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-gray-900 mb-2">EcoPickup AI Guide 🤖</h2>
+                    <p class="text-gray-500">Not sure how to sort something? Ask our AI assistant to instantly find out if it's wet, dry, or e-waste.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col h-[600px] max-w-4xl mx-auto">
+                    <div id="chat-box" class="flex-1 overflow-y-auto mb-4 p-4 space-y-4 custom-scrollbar bg-gray-50 rounded-xl border border-gray-100">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-robot text-lg"></i></div>
+                            <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm text-gray-800 text-sm max-w-[80%] leading-relaxed">
+                                Hello! I'm your EcoPickup AI assistant. Tell me what item you're holding, and I'll help you segregate it properly into wet, dry, or e-waste!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="ai-form" class="flex gap-3">
+                        <input type="text" id="ai-input" class="flex-1 bg-white border-2 border-gray-200 text-gray-900 rounded-xl p-4 outline-none focus:border-brand-500 transition-colors shadow-sm" placeholder="e.g. Pizza box with grease on it..." required>
+                        <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-md transform hover:-translate-y-0.5 flex items-center gap-2">
+                            Ask <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- SPA Tab Logic -->
+    <script>
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            // Show target tab
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('block');
+
+            // Reset navigation styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-50', 'text-brand-600');
+                btn.classList.add('text-gray-500');
+            });
+
+            // Highlight target nav
+            const activeNav = document.getElementById('nav-' + tabId);
+            if(activeNav) {
+                activeNav.classList.remove('text-gray-500');
+                activeNav.classList.add('bg-brand-50', 'text-brand-600');
+            }
+
+            // Change header title based on tab context
+            const titles = {
+                'gamification': 'Your Rewards Dashboard',
+                'schedule': 'Pickup Scheduling',
+                'tracking': 'Live Captain Tracking',
+                'profile': 'Account Settings',
+                'ai': 'AI Sorting Guide'
+            };
+            document.getElementById('page-title').innerText = titles[tabId];
+            
+            // Scroll to top automatically on tab change
+            document.querySelector('main').scrollTo({ top: 0, behavior: 'auto' });
+        }
+
+        // Initialize SPA Tab from URL on load
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const tabParam = params.get('tab');
+            if (tabParam && document.getElementById('tab-' + tabParam)) {
+                showTab(tabParam);
+            } else {
+                showTab('gamification');
+            }
+        };
+
+        // AI Chat handling
+        document.getElementById('ai-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('ai-input');
+            const message = input.value.trim();
+            if(!message) return;
+            
+            const chatBox = document.getElementById('chat-box');
+            
+            // Add user message
+            chatBox.innerHTML += `
+                <div class="flex items-start gap-4 flex-row-reverse">
+                    <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-user"></i></div>
+                    <div class="bg-brand-600 p-4 rounded-2xl rounded-tr-none shadow-sm text-white text-sm max-w-[80%] leading-relaxed">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Add typing indicator
+            const typingId = 'typing-' + Date.now();
+            chatBox.innerHTML += `
+                <div id="${typingId}" class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-robot"></i></div>
+                    <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm text-gray-500 text-sm italic">
+                        Thinking...
+                    </div>
+                </div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                
+                document.getElementById(typingId).remove();
+                
+                // Add AI response
+                chatBox.innerHTML += `
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-robot text-lg"></i></div>
+                        <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm text-gray-800 text-sm max-w-[80%] leading-relaxed">
+                            ${data.reply.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                `;
+            } catch(err) {
+                document.getElementById(typingId).remove();
+                chatBox.innerHTML += `
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-red-200 shadow-sm text-red-600 text-sm">
+                            Network error. Please try again later.
+                        </div>
+                    </div>
+                `;
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
+</body>
+</html>
