@@ -69,15 +69,43 @@
         </div>
     </aside>
 
-    <!-- Mobile Menu Button Only (overlay logic omitted for brevity in this single file demo) -->
-    
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-gray-900/50 z-40 hidden transition-opacity opacity-0 lg:hidden"></div>
+    <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between lg:hidden">
+        <div>
+            <div class="h-20 flex items-center justify-between px-6 border-b border-gray-100">
+                <a href="index.html" class="text-xl font-bold tracking-tight flex items-center gap-2 group">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white"><i class="fa-solid fa-leaf text-sm"></i></div>
+                    <span class="text-gray-900">Eco<span class="text-brand-600">Pickup</span></span>
+                </a>
+                <button id="close-mobile-menu" class="text-gray-500 hover:text-gray-900"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <nav class="p-4 space-y-2 relative h-full overflow-y-auto">
+                <button id="nav-mob-gamification" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl bg-brand-50 text-brand-600 font-semibold transition-all" onclick="showTab('gamification'); toggleMobileMenu(false);">
+                    <i class="fa-solid fa-gamepad w-5 text-left"></i> Gamification
+                </button>
+                <button id="nav-mob-schedule" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('schedule'); toggleMobileMenu(false);">
+                    <i class="fa-solid fa-box w-5 text-left"></i> Schedule Pickup
+                </button>
+                <button id="nav-mob-tracking" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('tracking'); toggleMobileMenu(false);">
+                    <i class="fa-solid fa-truck-fast w-5 text-left"></i> Tracking
+                </button>
+                <button id="nav-mob-profile" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('profile'); toggleMobileMenu(false);">
+                    <i class="fa-solid fa-user w-5 text-left"></i> Profile Settings
+                </button>
+                <button id="nav-mob-ai" class="w-full nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-semibold transition-all" onclick="showTab('ai'); toggleMobileMenu(false);">
+                    <i class="fa-solid fa-robot w-5 text-left"></i> AI Sorting Guide
+                </button>
+            </nav>
+        </div>
+    </aside>
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-y-auto custom-scrollbar relative">
         
         <!-- Header -->
         <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-6 md:px-10 sticky top-0 z-30">
             <div class="flex items-center gap-4">
-                <button class="md:hidden text-gray-500"><i class="fa-solid fa-bars text-xl"></i></button>
+                <button id="hamburger-btn" class="md:hidden text-gray-500"><i class="fa-solid fa-bars text-xl"></i></button>
                 <h1 id="page-title" class="text-xl font-bold text-gray-900">Your Rewards Dashboard</h1>
             </div>
             <div class="flex items-center gap-6 cursor-pointer">
@@ -562,14 +590,19 @@
 
             // Highlight target nav
             const activeNav = document.getElementById('nav-' + tabId);
+            const activeMobNav = document.getElementById('nav-mob-' + tabId);
             if(activeNav) {
                 activeNav.classList.remove('text-gray-500');
                 activeNav.classList.add('bg-brand-50', 'text-brand-600');
             }
+            if(activeMobNav) {
+                activeMobNav.classList.remove('text-gray-500');
+                activeMobNav.classList.add('bg-brand-50', 'text-brand-600');
+            }
 
             // Change header title based on tab context
             const titles = {
-                'gamification': 'Your Rewards Dashboard',
+                'gamification': 'Rewards Dashboard',
                 'schedule': 'Pickup Scheduling',
                 'tracking': 'Live Captain Tracking',
                 'profile': 'Account Settings',
@@ -580,6 +613,28 @@
             // Scroll to top automatically on tab change
             document.querySelector('main').scrollTo({ top: 0, behavior: 'auto' });
         }
+
+        // Mobile Menu Logic
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenuOverlay = document.getElementById('mobile-menu');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
+
+        function toggleMobileMenu(show) {
+            if (show) {
+                mobileMenuOverlay.classList.remove('hidden');
+                setTimeout(() => mobileMenuOverlay.classList.remove('opacity-0'), 10);
+                mobileSidebar.classList.remove('-translate-x-full');
+            } else {
+                mobileMenuOverlay.classList.add('opacity-0');
+                mobileSidebar.classList.add('-translate-x-full');
+                setTimeout(() => mobileMenuOverlay.classList.add('hidden'), 300);
+            }
+        }
+
+        hamburgerBtn?.addEventListener('click', () => toggleMobileMenu(true));
+        closeMobileMenuBtn?.addEventListener('click', () => toggleMobileMenu(false));
+        mobileMenuOverlay?.addEventListener('click', () => toggleMobileMenu(false));
 
         // Initialize SPA Tab from URL on load
         window.onload = () => {
