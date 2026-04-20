@@ -27,7 +27,7 @@ def chat():
     data = request.get_json(silent=True) or {}
     user_message = data.get('message', '')
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
 
     payload = {
         "contents": [{
@@ -35,15 +35,21 @@ def chat():
         }]
     }
 
-    try:
-        req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={'Content-Type': 'application/json'})
-        with urllib.request.urlopen(req) as response:
-            result = json.loads(response.read().decode('utf-8'))
-            reply = result['candidates'][0]['content']['parts'][0]['text']
-            return jsonify({'reply': reply})
-    except Exception as e:
-        app.logger.error("Error communicating with Gemini API: %s", e)
-        return jsonify({'reply': f"Sorry, I couldn't connect to my AI database. Error: {str(e)}"}), 500
+    import time
+    max_retries = 2
+    for attempt in range(max_retries):
+        try:
+            req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={'Content-Type': 'application/json', 'User-Agent': 'EcoPickup/1.0'})
+            with urllib.request.urlopen(req, timeout=8) as response:
+                result = json.loads(response.read().decode('utf-8'))
+                reply = result['candidates'][0]['content']['parts'][0]['text']
+                return jsonify({'reply': reply})
+        except Exception as e:
+            if attempt < max_retries - 1 and '503' in str(e):
+                time.sleep(1)
+                continue
+            app.logger.error("Error communicating with Gemini API: %s", e)
+            return jsonify({'reply': f"Sorry, I couldn't connect to my AI database. Error: {str(e)}"}), 500
 
 if __name__ == '__main__':
     print("EcoPickup Web App running on http://127.0.0.1:5000")
