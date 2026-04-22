@@ -3,8 +3,30 @@ from flask import Flask, send_from_directory, request, jsonify
 import urllib.request
 import json
 import logging
+import pandas as pd
+from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__, static_folder='.', static_url_path='')
+logging.basicConfig(level=logging.INFO)
+
+# Load or create dataset and train model
+dataset_path = 'waste_dataset.csv'
+if not os.path.exists(dataset_path):
+    data = {
+        'household_size': [2, 4, 1, 5, 3, 2, 4, 6, 3, 1],
+        'waste_last_week': [5.5, 12.0, 2.0, 15.5, 8.0, 6.0, 10.0, 18.0, 7.5, 3.0],
+        'area_code': [1, 2, 1, 3, 2, 3, 1, 2, 1, 3],
+        'days_to_pickup': [4, 2, 7, 1, 3, 4, 3, 1, 3, 6]
+    }
+    pd.DataFrame(data).to_csv(dataset_path, index=False)
+
+df = pd.read_csv(dataset_path)
+X = df[['household_size', 'waste_last_week', 'area_code']]
+y = df['days_to_pickup']
+
+pickup_model = LinearRegression()
+pickup_model.fit(X, y)
+
 logging.basicConfig(level=logging.INFO)
 
 # Read Gemini API key from environment (set in .env or Vercel secrets)
@@ -51,8 +73,24 @@ def chat():
             app.logger.error("Error communicating with Gemini API: %s", e)
             return jsonify({'reply': f"Sorry, I couldn't connect to my AI database. Error: {str(e)}"}), 500
 
+@app.route('/api/predict_pickup', methods=['POST'])
+def predict_pickup():
+    data = request.get_json(silent=True) or {}
+    try:
+        household_size = float(data.get('household_size', 1))
+        waste_last_week = float(data.get('waste_last_week', 0))
+        area_code = float(data.get('area_code', 1))
+        
+        # Predict using the trained model
+        prediction = pickup_model.predict([[household_size, waste_last_week, area_code]])
+        days = max(1, int(round(prediction[0])))
+        
+        return jsonify({'message': f"Next pickup should be in {days} days"})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
 if __name__ == '__main__':
-    print("EcoPickup Web App running on http://127.0.0.1:5000")
+    print("EcoPickup Web App running on http://127.0.0.1:5001")
     host = os.getenv('HOST', '127.0.0.1')
-    port = int(os.getenv('PORT', '5000'))
+    port = int(os.getenv('PORT', '5001'))
     app.run(host=host, port=port, debug=True)
