@@ -31,7 +31,9 @@ logging.basicConfig(level=logging.INFO)
 
 # Read Gemini API key from environment (set in .env or Vercel secrets)
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-if not GEMINI_API_KEY:
+if GEMINI_API_KEY:
+    GEMINI_API_KEY = GEMINI_API_KEY.strip()
+else:
     logging.error('GEMINI_API_KEY not set in environment')
 
 @app.route('/')
@@ -66,6 +68,15 @@ def chat():
                 result = json.loads(response.read().decode('utf-8'))
                 reply = result['candidates'][0]['content']['parts'][0]['text']
                 return jsonify({'reply': reply})
+        except urllib.error.HTTPError as e:
+            try:
+                error_body = e.read().decode('utf-8')
+                error_json = json.loads(error_body)
+                error_msg = error_json.get('error', {}).get('message', error_body)
+            except:
+                error_msg = str(e)
+            app.logger.error("Gemini API HTTP Error: %s", error_msg)
+            return jsonify({'reply': f"Sorry, I couldn't connect to my AI database. Error: {error_msg}"}), 500
         except Exception as e:
             if attempt < max_retries - 1 and '503' in str(e):
                 time.sleep(1)
